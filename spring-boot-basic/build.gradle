@@ -1,0 +1,49 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.2'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.minod'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+
+tasks.withType(JavaCompile){
+	options.encoding = "UTF-8"
+}
+// lombok 설정 추가
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+// lombok 설정 추가 완료
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	//lombok 라이브러리 추가
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	//lombok 라이브러리 추가 완료
+
+	// javax.inject.Provider
+	implementation 'jakarta.inject:jakarta.inject-api:2.0.1'
+
+	// 웹 환경을 위해 추가 (톰캣추가
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
