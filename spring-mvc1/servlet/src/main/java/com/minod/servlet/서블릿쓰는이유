@@ -1,0 +1,8 @@
+request가 오는 주소를 설정해두고
+request가 해당 주소로 오면 request객체와 response객체를 만들어준다. 이걸로 편하게 응답할 수 있는게 서블릿
+
+ // 주로 3가지 방법으로 HTTP 데이터 요청한다.
+ - GET, 쿼리파라미터에 데이터 포함시켜
+ - POST - HTML form으로 요청
+ - HTTP Message BODY 에 포함시켜 API로 요청 (JSON, XML, TEXT)
+    - POST, PUT, PATCH
