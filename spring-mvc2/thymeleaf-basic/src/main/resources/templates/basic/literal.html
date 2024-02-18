@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>리터럴</h1>
+<ul>
+    <!-- 띄워쓰기 들어가면 인식못해서 실행시 에러 발생합니다.-->
+    <!-- <div>"안녕 하세요!" = <span th:text="안녕 하세요!"></span></div>-->
+    <div>'안녕' + ' 하세요!' = <span th:text="'안녕' + ' 하세요!'"></span></div>
+    <div>'안녕 하세요!' = <span th:text="'안녕 하세요!'"></span></div>
+    <div>'안녕 ' + ${data} = <span th:text="'안녕 ' + ${data}"></span></div>
+    <div>|로 감싸면 띄워쓰기를 포함시켜 넣기 가능합니다. |안녕 ${data}| = <span th:text="|안녕 ${data}|"></span></div>
+</ul>
+</body>
+</html>
