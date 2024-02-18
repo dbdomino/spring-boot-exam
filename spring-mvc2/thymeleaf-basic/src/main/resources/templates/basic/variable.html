@@ -21,5 +21,14 @@
     <li>${userMap['userA']['username']} = <span th:text="${userMap['userA']['username']}"></span></li>
     <li>${userMap['userA'].getUsername()} = <span th:text="${userMap['userA'].getUsername()}"></span></li>
 </ul>
+
+<h1>지역 변수 - (th:with)</h1 >
+<div 변수선언 th:with="first=${userList[0]}, second=${userList[1]}" >
+    <p >변수 선언은 태그가 망가지지 않는 선에서 해야하며,  지역 변수는 선언한 태그 안에서만 사용할 수 있다. 밖에서는 안먹히는 것으로 확인됨.</span></p>
+    <p>first 변수 가져오기(Object) <span th:text="${first}"></span></p>
+    <p >first.username 변수 가져오기 <span th:text="${first.username}"></span></p>
+    <p>second 변수 가져오기(Object) <span th:text="${second}"></span></p>
+    <p>두개이상 동시 선언도 가능, 만약 변수로 가져오는게 실패한다면 빈값을 출력한다.</p>
+</div>
 </body>
 </html>
