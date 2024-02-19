@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>태그 하위에 삽입(포함)</h2>
+<h3>th:insert="~{경로 :: fragment이름}"</h3>
+<div th:insert="~{template/fragment/footer :: copy}"></div>
+
+<h2>태그를 대체(div사라짐)</h2>
+<h3>th:replace="~{경로 :: fragment이름}"</h3>
+<div th:replace="~{template/fragment/footer :: copy}"></div>
+
+<h2>태그를 대체(더 간단하게 표현)</h2>
+<h3>th:replace="경로 :: fragment이름"</h3>
+<div th:replace="template/fragment/footer :: copy"></div>
+
+<h2>태그를 대체(다른 fragment 불러오기)</h2>
+<h3>th:replace="~{경로 :: fragment이름}"</h3>
+<div th:replace="~{template/fragment/footer :: copyParam ('데이터1', '데이터2') }"></div>
+
+</body>
+</html>
