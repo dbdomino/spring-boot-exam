@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 560px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="py-5 text-center">
+        <h2>상품 등록 폼</h2>
+    </div>
+
+    <form action="item.html" th:action th:object="${item}" method="post">
+        <div>
+            <label for="itemName">상품명</label>
+            <input type="text" class="form-control" placeholder="이름을 입력하세요" th:field="*{itemName}">
+        </div>
+        <!--/*
+         th:object="${item}" : <form> 에서 사용할 객체를 지정한다. 선택 변수 식( *{...} )을 적용할 수 있다.
+        */-->
+        <div>
+            <label for="price">가격</label>
+            <input type="text" id="price" name="price" class="form-control" placeholder="가격을 입력하세요">
+        </div>
+        <div>
+            <label for="quantity">수량</label>
+            <input type="text" id="quantity" name="quantity" class="form-control" placeholder="수량을 입력하세요">
+        </div>
+
+        <hr class="my-4">
+        <!-- single checkbox 순수 체크박스, value가 체크시 true, 비체크시 null 로 서버에 온다. -->
+        <div>체크 확인</div>
+        <div>
+            <div class="form-check">
+                <input type="checkbox" th:field="*{open}" class="form-check-input"  checked="checked">
+                <label class="form-check-label" th:for="${#ids.prev('open')}">체크 확인</label>
+            </div>
+        </div>
+
+        <hr class="my-4">
+        <!-- multi checkbox -->
+        <div>
+            <div>멀티 체크박스 확인</div>
+            <!--/* org.thymeleaf.expression.Ids #ids 타임리프 지원기능으로 보입니다. */-->
+            <div th:each="region : ${regions}" class="form-check form-check-inline">
+                <!--/* th:field="*{regions}" -> form의 th:object 에 등록해둔 것의 멤버변수를 불러와서 렌더링시킵니다.
+                 th:value="${region.key}" 는 th:each="region : ${regions}" 의 반복결과를 말합니다.
+                 <label th:for="${#ids.prev('regions')}"  이게 뭐냐면, label의 for옵션에 input의 id를 넣어주기 위해 사용합니다.
+                  id가 동적으로 input에 생성될 때, 이전'regions'에 넣었던 id값을 가져와 다른곳에서도 변수로 넣어줍니다.
+                  label의 for 값과 input의 for값이 같을 경우, label을 클릭하면 input의 체크박스가 체크되는 기능을 넣을 수 있습니다.*/-->
+                <input type="checkbox" th:field="*{regions}" th:value="${region.key}" class="form-check-input">
+                <label th:for="${#ids.prev('regions')}" th:text="${region.value}" class="form-check-label"></label>
+            </div>
+        </div>
+
+        <hr class="my-4">
+        <!-- radio button -->
+        <div>
+            <div>라디오 버튼 선택</div>
+            <div th:each="type : ${itemTypes}" class="form-check form-check-inline">
+                <input type="radio" th:field="*{itemType}" th:value="${type.name()}" class="form-check-input">
+                <label th:for="${#ids.prev('itemType')}" th:text="${type.description}" class="form-check-label">
+                </label>
+            </div>
+        </div>
+
+        <hr class="my-4">
+        <!-- SELECT Box-->
+        <div>
+            <div>배송 방식</div>
+            <select th:field="*{deliveryCode}" class="form-select">
+                <option value="">==배송 방식 선택==</option>
+                <option th:each="deliveryCode : ${deliveryCodes}" th:value="${deliveryCode.code}"
+                        th:text="${deliveryCode.displayName}">FAST</option>
+            </select>
+        </div>
+
+
+        <hr class="my-4">
+
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg" type="submit">상품 등록</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        onclick="location.href='items.html'"
+                        th:onclick="|location.href='@{/form/items}'|"
+                        type="button">취소</button>
+            </div>
+        </div>
+
+    </form>
+
+</div> <!-- /container -->
+</body>
+</html>
