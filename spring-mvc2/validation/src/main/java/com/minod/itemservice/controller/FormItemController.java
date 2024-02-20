@@ -24,7 +24,7 @@ public class FormItemController {
 
     private final ItemRepository itemRepository;
 
-    @ModelAttribute("regions") // 어노테이션 중에 @ModelAttribute 라는게 있다.
+    @ModelAttribute("regions") // 어노테이션 중에 @ModelAttribute  라는게 있다.
     // 여기 컨트롤러 안에서 어떤 모델에라도 위에 선언된 "regions"라는 이름으로 return 결과를 addAttribute 시켜줍니다.
     // 파라미터에 @ModelAttribute 를 넣어서 객체로 request값을 매핑시키는 방법과는 다른 방법입니다.
     // 해당 컨트롤러 내부에 모든 Model에 정보를 담아야 할 경우 유용하게 사용할 수 있는 기능입니다. 다만 계속호출됩니다.
