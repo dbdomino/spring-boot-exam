@@ -1,0 +1,34 @@
+검증은 사용자, 비즈니스 측 의 특정 조건을 만족하는지 확인 후
+만족하지 않으면 다시 입력받도록 하거나 실패를 반환하거나 해야하기 때문에 사용
+
+오류정보를 포함해서 뷰에 뿌려주는 기술도 중요
+
+BindingResult   스프링이 제공하는 검증 오류를 보관하는 객체, 검증오류 발생시 여기보관
+- 스프링이 자체적으로 FieldError생성해서 넣어줌
+- 사용자가 직접 FieldError객체 생성해서 넣어줌
+- BindingResult 의 rejectValue() 써서 넣어줌
+
+FieldError 생성자의 파라미터
+필드에 오류가 있으면 FieldError 객체를 생성해서 bindingResult 에 담아두면 된다.
+objectName : @ModelAttribute 이름
+field : 오류가 발생한 필드 이름
+defaultMessage : 오류 기본 메시지
+파라미터 목록
+objectName : 오류가 발생한 객체 이름
+field : 오류 필드
+rejectedValue : 사용자가 입력한 값(거절된 값)
+bindingFailure : 타입 오류 같은 바인딩 실패인지, 검증 실패인지 구분 값
+codes : 메시지 코드
+arguments : 메시지에서 사용하는 인자
+defaultMessage : 기본 오류 메시지
+
+오류코드 프로퍼티에 넣어서 불러오기
+- 불러오는거는 BindingResult가 만든 우선순위대로 불러온다
+- error.properties에 넣기위해 application.properties 에 설정 추가 해야함.
+
+검증을 컨트롤러에서 분리하기위해
+- @Validated 어노테이션을 검증할 객체에 붙여 자동으로 검증
+- 이를 위해 WebDataBinder(스프링 MVC에서 제공하는 객체, 컨트롤러에 떠있음) 여기다가 validate할 validator 객체를 addValidators시킨다.
+- 그 뒤에 사용가능.
+
+- 검증, 벨리데이션을 이 방법아닌, 또다른 어노테이션으로 관리하는 BeanValidation 기능도 알아본다.

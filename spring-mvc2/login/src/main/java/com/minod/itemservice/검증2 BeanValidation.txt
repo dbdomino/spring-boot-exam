@@ -1,0 +1,81 @@
+의존관계 추가
+Bean Validation을 사용하려면 다음 의존관계를 추가해야 한다.
+build.gradle
+implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+Jakarta Bean Validation
+jakarta.validation-api : Bean Validation 인터페이스
+hibernate-validator 구현체
+javax.validation 으로 시작하면 특정 구현에 관계없이 제공되는 표준 인터페이스이고,
+org.hibernate.validator 로 시작하면 하이버네이트 validator 구현체를 사용할 때만 제공되는 검증 기능이다.
+실무에서 대부분 하이버네이트 validator를 사용하므로 자유롭게 사용해도 된다.
+
+### 검증 애노테이션
+- @NotBlank : 빈값 + 공백만 있는 경우를 허용하지 않는다.
+- @NotNull : null 을 허용하지 않는다.
+- @Range(min = 1000, max = 1000000) : 범위 안의 값이어야 한다.
+- @Max(9999) : 최대 9999까지만 허용한다.
+
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+
+### 스프링 MVC는 어떻게 Bean Validator를 사용?
+- 스프링 부트가 spring-boot-starter-validation 라이브러리를 넣으면 자동으로 Bean Validator를 인지하고 스프링에 통합한다.
+### 스프링 부트는 자동으로 글로벌 Validator로 등록한다.
+- LocalValidatorFactoryBean 을 글로벌 Validator로 등록한다. 이 Validator는 @NotNull 같은 애노테이션을보고 검증을 수행한다.
+- 이렇게 글로벌 Validator가 적용되어 있기 때문에, @Valid , @Validated 만 적용하면 된다.
+- 검증 오류가 발생하면, FieldError , ObjectError 를 생성해서 BindingResult 에 담아준다.
+
+검증 순서
+1.   @ModelAttribute 각각의 필드에 타입 변환 시도
+2.   성공하면 다음으로
+3.   실패하면 typeMismatch 로 FieldError 추가
+4.   바인딩에 성공한 필드만 Bean Validation 적용
+5.   Validator 적용
+- BeanValidator는 바인딩에 실패한 필드는 BeanValidation을 적용하지 않는다.
+- 생각해보면 타입 변환에 성공해서 바인딩에 성공한 필드여야 BeanValidation 적용이 의미 있다. (일단 모델 객체에 바인딩 받는 값이 정상으로 들어와야 검증도 의미가 있다.)
+
+Bean Validation 으로 검증시 오류코드는 어떻게?
+'item' on field 'itemName': rejected value []; codes [NotBlank.item.itemName,NotBlank.itemName,NotBlank.java.lang.String,NotBlank];
+'item' on field 'quantity': rejected value [null]; codes [NotNull.item.quantity,NotNull.quantity,NotNull.java.lang.Integer,NotNull]
+'item' on field 'price': rejected value [223]; codes [Range.item.price,Range.price,Range.java.lang.Integer,Range];
+MessageCodeResolver가 에러코드를 위처럼 등록해줍니다.
+보면 Item 객체에 등록된 BeanValidation 어노테이션 이름, 변수명, 변수타입 들이 조합되어있습니다.
+오류코드 우선순위에 해당하는 오류코드를 찝어서 messages.properties 또는 errors.properties 에다 등록해줘야 value를 원하는데로 조합 후 쓸 수 있스빈다.
+어떻게보면, 오류코드는 스프링의 MessageCodeResolver가 만들어주는 양식을 이해하고 거기서 빼내서 커스터마이징 하는게 핵심기술 인것 같습니다.
+
+BeanValidation 어노테이션에 맞춰 MessageCodesResolver가 생성한 에러코드는 다음과 같이 정리가능합니다.
+@NotBlank
+NotBlank.item.itemName
+NotBlank.itemName
+NotBlank.java.lang.String
+NotBlank
+@Range
+Range.item.price
+Range.price
+Range.java.lang.Integer
+Range
+
+Bean Validation Group
+Bean에 Validation을 위한 Hibernate Validation어노테이션을 적용해두면,
+객체 호출시 모두 적용된다.
+다만 문제는 기능적인 측면에서 특정 필드에는 적용되고 다른곳은 적용안되어야 하는 이슈가 있을 수 있습니다.
+예시, 등록, 수정에서 validation 기준이 달라질 경우. (id값이 등록엔 db에서등록되므로 없어도되지만, 수정에는 필수값으로 NotNull이어야함)
+이를 위한 방법으로 Group을 사용합니다.
+다만 클래스파일이 너무 지저분해져 사용하기 번거롭고, 잘 안 쓴다고 합니다.
+
+Item을 직접 사용하지 않고, ItemSaveForm, ItemUpdateForm 같은 폼 전송을 위한 별도의 모델 객체를 만들어서 사용한다.
+이를 (Form 전송 객체) 라고하며, 전송객체로 분리하여 사용한다고하는데,
+등록, 수정에는 동일한 데이터가 넘어오지 않으며, 수정 불가능한 데이터도 달라진다.
+즉, 등록 폼, 수정 폼에 들어가는 전달객체가, 도메인 객체와 딱 맞지는 않는다.
+그래서 전송객체로 분리하여 사용하는게 낫다고 한다.
+
+예를 들면 ItemSaveForm 이라는 폼을 전달받는 전용 객체를 만들어서 @ModelAttribute 로 사용한다
+이름은 의미있게 지으면 된다. ItemSave 라고 해도 되고, ItemSaveForm , ItemSaveRequest, ItemSaveDto 등으로 사용해도 된다. 중요한 것은 일관성이다.
+다만 전송 객체를 적용하는데, 컨트롤러까지만 적용하고, 서비스측이나 리포지터리 측은 변경을 안하는것이 최소한의 변경을 유지시킨다.
+또한 Save객체, Edit객체만의 Bean Validation 설정도 가능하다.
+
+
+
+
