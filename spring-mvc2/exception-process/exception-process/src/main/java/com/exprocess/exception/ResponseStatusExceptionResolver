@@ -1,0 +1,7 @@
+HandlerExceptionResolverComposite 에 다음 순서로 등록
+
+1. ExceptionHandlerExceptionResolver
+2. ResponseStatusExceptionResolver
+3. DefaultHandlerExceptionResolver 우선 순위가 가장 낮다.
+
+그중 2번째 구현 한 것
