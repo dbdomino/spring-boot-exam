@@ -1,0 +1,19 @@
+# 패키지 기준으로 로그레벨 설정 가능. slf4j
+# logging.level.패키지경로   ->   패키지경로 이하는 전부 해당하는걸로 설정됩니다.
+logging.level.root=info
+logging.level.com.minod.springmvc=info
+logging.level.com.minod.itemservice.controller=debug
+# 개발은 debug 운영은 info 나 error 로 설정하기도함.
+
+# application.properties 메뉴얼
+# https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#appendix.application-properties
+# 스프링 부트 메시지 소스 기본 값
+#spring.messages.basename=messages
+# 기본소스로 errors 라는 것도 프로퍼티로 쓸려면 수정해줘야 함.
+spring.messages.basename=messages,errors
+
+# 세션, TrackingModes 를 꺼서 로그인시 jsessionId 안나오게 하기.
+server.servlet.session.tracking-modes=cookie
+# 세션. 스프링 부트로 세션 타임아웃 글로벌 설정  (주의, 글로벌 설정은 분 단위로 설정해야 한다. )
+# 60초    (기본은 1800   30분)
+server.servlet.session.timeout=60
