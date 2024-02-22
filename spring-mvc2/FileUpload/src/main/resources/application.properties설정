@@ -1,0 +1,40 @@
+# 패키지 기준으로 로그레벨 설정 가능. slf4j
+# logging.level.패키지경로   ->   패키지경로 이하는 전부 해당하는걸로 설정됩니다.
+logging.level.root=info
+logging.level.com.minod.springmvc=info
+logging.level.com.minod.itemservice.controller=debug
+# 개발은 debug 운영은 info 나 error 로 설정하기도함.
+
+# application.properties 메뉴얼
+# https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#appendix.application-properties
+# 스프링 부트 메시지 소스 기본 값
+#spring.messages.basename=messages
+# 기본소스로 errors 라는 것도 프로퍼티로 쓸려면 수정해줘야 함.
+spring.messages.basename=messages,errors
+
+# 세션, TrackingModes 를 꺼서 로그인시 jsessionId 안나오게 하기.
+server.servlet.session.tracking-modes=cookie
+# 세션. 스프링 부트로 세션 타임아웃 글로벌 설정  (주의, 글로벌 설정은 분 단위로 설정해야 한다. )
+# 60초    (기본은 1800   30분)
+server.servlet.session.timeout=60
+
+# 에러시 white 페이지 띄울건지 말건지 선택하는 옵션
+server.error.whitelabel.enabled=false
+# 에러시 에러페이지를 다시 요청할 때 에러정보를 담을지 말지 결정하는 옵션, BasicErrorController 수행
+server.error.include-exception=false   #true false
+server.error.include-message=never     #on-param always never
+server.error.include-stacktrace=never
+server.error.include-binding-errors=never
+
+## 실행해보면 logging.level.org.apache.coyote.http11 옵션을 통한 로그에서
+# multipart/form-data 방식으로 전송된 것을 확인할 수 있다.
+# 업로드시 멀티파트 관련 로그를 보려면 debug 하면 된다. 기본 info
+#logging.level.org.apache.coyote.http11=debug
+
+# 스프링은 기본적으로 멀티파트 관련 처리를 하는 것(true)으로 설정되어 있다. false로 하면 파일업로드는 막을 수 있다. 또한 application/x-www-form-urlencoded 로 받도록함.
+#spring.servlet.multipart.enabled=false
+
+# 파일 하나의 최대 사이즈, 기본 1MB
+#spring.servlet.multipart.max-file-size=1MB
+# 멀티파트 요청 하나에 여러 파일을 업로드 할 수 있는데, 그 전체 합이다. 기본 10MB
+#spring.servlet.multipart.max-request-size=10MB
