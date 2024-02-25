@@ -12,6 +12,7 @@ public class WebServerCustomizer implements WebServerFactoryCustomizer<Configura
 // 에러시 아래 지정된 경로로 다시 호출하는데, 이를 위해 오류페이지를 처리할 컨트롤러가 필요하다. ErrorPageController
     @Override
     public void customize(ConfigurableWebServerFactory factory) {
+
         ErrorPage errorPage404= new ErrorPage(HttpStatus.NOT_FOUND, "/error-page/404");
         ErrorPage errorPage500= new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error-page/500");
         ErrorPage errorPageEx= new ErrorPage(RuntimeException.class, "/error-page/500"); // 런타임도 걍 같은화면으로

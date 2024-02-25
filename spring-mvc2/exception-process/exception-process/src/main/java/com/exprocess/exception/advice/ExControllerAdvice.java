@@ -23,13 +23,13 @@ public class ExControllerAdvice {
     @ExceptionHandler(IllegalArgumentException.class)
     public ErrorResult illegalExHandler(IllegalArgumentException e) {
         log.error("exceptionHandle  ex" );
-        log.error("exceptionHandle [exceptionHandle] ex", e);
+        log.error("ExControllerAdvice illegalExHandler [IllegalArgumentException] ex", e);
         return new ErrorResult("BAD", e.getMessage());
     }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResult> userExHandle(UserException e) {
-        log.error("[exceptionHandle] ex", e);
+        log.error("ExControllerAdvice userExHandle [UserException] ex", e);
         ErrorResult errorResult = new ErrorResult("USER-EX", e.getMessage());
         return new ResponseEntity<>(errorResult, HttpStatus.TOO_EARLY); // 여기있는걸 더 우선으로잡아주네.
     }
@@ -40,8 +40,15 @@ public class ExControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) //500 으로 상태코드 만들어 보내겠단소리, 다른걸로 변경 가능
     @ExceptionHandler
     public ErrorResult exHandle(Exception e) {
-        log.error("[exceptionHandle] ex");
+        log.error("ExControllerAdvice exHandle [Exception]  ex");
         return new ErrorResult("EX", "내부 오류");
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) //500 으로 상태코드 만들어 보내겠단소리, 다른걸로 변경 가능
+    @ExceptionHandler
+    public ErrorResult exHandleRuntimeException(RuntimeException e) {
+        log.error("[exceptionHandle] exHandleRuntimeException [RuntimeException] ex");
+        return new ErrorResult("EX", "내부 오류 RuntimeException");
     }
 
     // 이런식으로 2개이상의 예외 클래스 처리가능하도록 선언도 가능
