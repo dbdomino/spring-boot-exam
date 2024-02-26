@@ -17,6 +17,7 @@ public class MemberRepositoryV2 {
         this.dataSource = dataSource;
     }
 
+
     public Member save(Member member) throws SQLException {
         String sql = "insert into member2(member_id, money) values(?, ?)";
         Connection con = null;
