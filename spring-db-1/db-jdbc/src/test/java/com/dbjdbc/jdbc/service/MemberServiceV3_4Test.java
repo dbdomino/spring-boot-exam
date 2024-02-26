@@ -13,23 +13,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
-import static com.dbjdbc.jdbc.connection.ConnectionConst.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
- * 트랜잭션 - AOP를 이용한 @Transactional
+ * 트랜잭션 - DataSource TransactionManager 자동주입 확인하기
  */
 @Slf4j
 @SpringBootTest // AOP 실행을 위해 스프링컨테이너 에서 실행이 필요. 조건1
-class MemberServiceV3_3Test {
+class MemberServiceV3_4Test {
     public static final String MEMBER_A = "memberA";
     public static final String MEMBER_B = "memberB";
     public static final String MEMBER_EX = "ex";
@@ -41,18 +37,17 @@ class MemberServiceV3_3Test {
     // 이건 신기하네 처음본다.
     @TestConfiguration // BeforeEach 에 있는거 설정파일로 만들어 Bean으로 등록
     static class TestConfig {
-        @Bean
-        DataSource dataSource() {  // DataSource javax.sql
-            return new DriverManagerDataSource(URL,USERNAME, PASSWORD);
-        }// DataSource 스프링에서 기본으로 사용할 데이터소스를 스프링 빈으로 등록한다. 추가로 트랜잭션 매니저에서도 사용한다.
-        @Bean
-        PlatformTransactionManager transactionManager() { // 트랜잭션 프록시에서 쓰기 위해 필요, 트랜잭션 매니저를 스프링 빈으로 등록한다.
-            return new DataSourceTransactionManager(dataSource()); // 이거 Bean등록 안되어있으면 서비스에서 @Transactional 쓰더라도 롤백 지원 안됨.
-        }// 스프링이 제공하는 트랜잭션 AOP는 스프링 빈에 등록된 트랜잭션 매니저를 찾아서 사용하기 때문에 트랜잭션 매니저를 스프링 빈으로 등록해두어야 한다.
+
+        private final DataSource dataSource;
+
+        public TestConfig(DataSource dataSource){
+            this.dataSource = dataSource; // 외부 주입 되도록 생성자 주입
+        }
+        // dataSource와 transactionManager @Bean으로 등록 없어도 자동으로 주입이 지원된다. 자동생성 지원 되네!!! 오오
         @Bean
         MemberRepositoryV3 memberRepositoryV3() {
-            return new MemberRepositoryV3(dataSource());
-        }
+            return new MemberRepositoryV3(dataSource);
+        } // 외부주입되는거사용
         @Bean
         MemberServiceV3_3 memberServiceV3_3() {
             return new MemberServiceV3_3(memberRepositoryV3());

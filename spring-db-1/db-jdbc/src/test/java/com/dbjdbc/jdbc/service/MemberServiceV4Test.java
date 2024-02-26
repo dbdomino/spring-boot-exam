@@ -1,7 +1,8 @@
 package com.dbjdbc.jdbc.service;
 
 import com.dbjdbc.domain.Member;
-import com.dbjdbc.jdbc.repository.MemberRepositoryV3;
+import com.dbjdbc.jdbc.repository.MemberRepository;
+import com.dbjdbc.jdbc.repository.MemberRepositoryV4_1;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
@@ -13,49 +14,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 
-import static com.dbjdbc.jdbc.connection.ConnectionConst.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
- * 트랜잭션 - AOP를 이용한 @Transactional
+ * AOP 기능으로 트랜잭션 지원,
+ * @Transactional 쓰면 AOP로 자동으로 트랜잭션 보장을 위한 소스를 집어넣어줌.
+ *
+ * MemberRepository 인터페이스 활용 - 예외 누수(예외에 대한 의존) 해결하기
+ * 핵심. MemberRepository 인터페이스로 Repository 실행, 주입은 스프링에서 받든 외부에서 받든 구현체 받음,
+ * throws SQLException 제거 (영한좌는 SQLException이 없어야 순수한 로직이라고 함. JDBC 의존이 싫었나봄.)
  */
 @Slf4j
 @SpringBootTest // AOP 실행을 위해 스프링컨테이너 에서 실행이 필요. 조건1
-class MemberServiceV3_3Test {
+class MemberServiceV4Test {
     public static final String MEMBER_A = "memberA";
     public static final String MEMBER_B = "memberB";
     public static final String MEMBER_EX = "ex";
 
     // 스프링 Bean에서 끌어오기 위해 컴포넌트 스캔 등록해줘야함. 또는 Bean등록 필요. 조건2
-    @Autowired private MemberRepositoryV3 memberRepository;
-    @Autowired private MemberServiceV3_3 memberService;
+    @Autowired private MemberRepository memberRepository;
+    @Autowired private MemberServiceV4 memberService;
 
     // 이건 신기하네 처음본다.
     @TestConfiguration // BeforeEach 에 있는거 설정파일로 만들어 Bean으로 등록
     static class TestConfig {
-        @Bean
-        DataSource dataSource() {  // DataSource javax.sql
-            return new DriverManagerDataSource(URL,USERNAME, PASSWORD);
-        }// DataSource 스프링에서 기본으로 사용할 데이터소스를 스프링 빈으로 등록한다. 추가로 트랜잭션 매니저에서도 사용한다.
-        @Bean
-        PlatformTransactionManager transactionManager() { // 트랜잭션 프록시에서 쓰기 위해 필요, 트랜잭션 매니저를 스프링 빈으로 등록한다.
-            return new DataSourceTransactionManager(dataSource()); // 이거 Bean등록 안되어있으면 서비스에서 @Transactional 쓰더라도 롤백 지원 안됨.
-        }// 스프링이 제공하는 트랜잭션 AOP는 스프링 빈에 등록된 트랜잭션 매니저를 찾아서 사용하기 때문에 트랜잭션 매니저를 스프링 빈으로 등록해두어야 한다.
-        @Bean
-        MemberRepositoryV3 memberRepositoryV3() {
-            return new MemberRepositoryV3(dataSource());
+
+        private final DataSource dataSource;
+
+        public TestConfig(DataSource dataSource){
+            this.dataSource = dataSource; // 외부 주입 되도록 생성자 주입
         }
+        // dataSource와 transactionManager @Bean으로 등록 없어도 자동으로 주입이 지원된다. 자동생성 지원 되네!!! 오오
         @Bean
-        MemberServiceV3_3 memberServiceV3_3() {
-            return new MemberServiceV3_3(memberRepositoryV3());
+        MemberRepository memberRepository() {
+            return new MemberRepositoryV4_1(dataSource);
+        } // 외부주입되는거사용
+        @Bean
+        MemberServiceV4 memberServiceV() {
+            return new MemberServiceV4(memberRepository());
         }
     }
 
@@ -68,7 +68,7 @@ class MemberServiceV3_3Test {
 //        memberService = new MemberServiceV3_3(memberRepository);
     }
     @AfterEach
-    void after() throws SQLException {
+    void after()  {
 //        memberRepository.delete(MEMBER_A);
 //        memberRepository.delete(MEMBER_B);
 //        memberRepository.delete(MEMBER_EX);
@@ -76,7 +76,7 @@ class MemberServiceV3_3Test {
 
     @Test
     @DisplayName("정상 이체")
-    void accountTransefer() throws SQLException {
+    void accountTransefer() {
         //given
 //        Member memberA = new Member(MEMBER_A, 15000);
 //        Member memberB = new Member(MEMBER_B, 15000);
@@ -101,7 +101,7 @@ class MemberServiceV3_3Test {
 
     @Test
     @DisplayName("이체중 예외발생")
-    void accountTranseferEx() throws SQLException {
+    void accountTranseferEx() {
         //given
         memberRepository.update(MEMBER_A,15000);
         memberRepository.update(MEMBER_EX,15000);
@@ -124,6 +124,11 @@ class MemberServiceV3_3Test {
          * 방법 3. AOP 를 활용한 트랜잭션 적용, @Transactional 붙여 서비스에 구현함. 그러나 rollback시도는 안되는걸로 확인됨.
          *     AOP를 활용하려면 스프링 컨테이너 사용이 반드시 필요하다. 스프링 Bean으로 등록해서 Repository, Service로 의존관계를 Autowired로 Bean으로 주입받아서 써야한다고 함.
          *     또한, 테스트클래스에 스프링 컨테이너없이 단순 @Test로 실행하는거면 AOP 수행 불가능해서 @SpringBootTest넣어줘야 한다고 함.
+         * 방법 4. 리포지터리에서 인터페이스 도입, 익셉션 전환으로 런타임익셉션으로 변경하여 throws SQLException으로 변경
+         *     이방법으로 JDBC Exception 의존(예외누수) 제거, 다만 MyDbException이라는 커스텀예외로 예외던짐.
+         *     MyDbException으로 퉁쳐서 가져오므로 예외 구분이 어려움.
+         *     -> 상황에 맞는 커스텀예외를 여럿 만들어서 DB의 에러코드에 따른 자체적인 예외처리 로직을 구현할 수 있다.
+         *     -> 키중복 오류라면, mysql은 1062 에러코드를 뱉는다고 한다. 에러코드 읽어서 에러코드에 따른 예외처리 구현?
          */
     }
 
