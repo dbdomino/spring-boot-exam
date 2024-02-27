@@ -1,0 +1,7 @@
+테스트용 application.properties는 test 경로 기준
+resources 디렉토리에 application.properties 에 넣어 실행 가능하다.
+디렉토리 없으면 만들어서 넣으면 된다. 해보자.
+
+테스트 케이스는 src/test 에 있기 때문에, 실행하면 src/test 에 있는 application.properties 파일이
+우선순위를 가지고 실행된다.
+테스트용 db설정 별도로 입력 가능
