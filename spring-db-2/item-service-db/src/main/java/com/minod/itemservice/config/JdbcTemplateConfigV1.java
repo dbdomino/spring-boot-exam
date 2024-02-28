@@ -6,11 +6,10 @@ import com.minod.itemservice.service.ItemService;
 import com.minod.itemservice.service.ItemServiceV1;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class JdbcTemplateConfigV1 {
 
