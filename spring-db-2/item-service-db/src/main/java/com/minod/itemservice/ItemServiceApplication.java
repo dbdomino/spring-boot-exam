@@ -1,6 +1,6 @@
 package com.minod.itemservice;
 
-import com.minod.itemservice.config.JdbcTemplateConfigV1;
+import com.minod.itemservice.config.JpaConfig;
 import com.minod.itemservice.repository.ItemRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -8,21 +8,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-
-import javax.sql.DataSource;
 
 @Slf4j
-@Import(JdbcTemplateConfigV1.class) // 이게있으면 @Configuration 어노테이션 안붙여도 읽어들여짐. @Import는 하나만선언가능?
+//@Import(JdbcTemplateConfigV1.class) // 이게있으면 @Configuration 어노테이션 안붙여도 읽어들여짐. @Import가 더 우선순위를 가짐.
 //@SpringBootApplication
+//@Import(MybatisConfig.class)
+@Import(JpaConfig.class)
 @SpringBootApplication(scanBasePackages = "com.minod.itemservice") // 오오... 어플리케이션 스캔 범위도 설정가능.
 public class ItemServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ItemServiceApplication.class, args);
-
-
-
 	}
 
 	@Bean
@@ -31,8 +27,10 @@ public class ItemServiceApplication {
 		return new TestDataInit(itemRepository);
 	}
 
-//	@Bean
-//	@Profile("test")
+
+	// embaded 데이터베이스로 테스트에 사용하기
+/*	@Bean
+	@Profile("test")
 	public DataSource dataSource() {
 		log.info("메모리 데이터베이스 초기화");
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -41,7 +39,7 @@ public class ItemServiceApplication {
 		dataSource.setUsername("sa");
 		dataSource.setPassword("");
 		return dataSource;
-		/** 임베디드로 H2 등록해서 사용하기
+		*//** 임베디드로 H2 등록해서 사용하기
 		 * H2 데이터베이스는 자바로 개발되어 있고, JVM안에서 메모리 모드로 동작하는 특별한 기능을 제공한다. 그래서 애플리케이션을 실행할 때 H2 데이터베이스도 해당 JVM 메모리에 포함해서 함께 실행할 수 있다.
 		 * @Profile("test")
 		 * 프로필이 test 인 경우에만 데이터소스를 스프링 빈으로 등록한다.
@@ -67,8 +65,8 @@ public class ItemServiceApplication {
 		 * 즉 테스트의 application.properties의 datasource를 지우면, 임베디드 데이베이스를 알아서 지원해준다는 소리다.
 		 * (임베디드 데이터베이스 설정을 지우더라도 자동으로 지원해준다. 테스트 DB로 사용하는 입장에선 편리할 수 있다고 하는데, 과연 이게 편리한건가? 머냐이건 좀 무섭다.)
 		 *
-		 */
+		 *//*
 
-    }
+    }*/
 
 }
