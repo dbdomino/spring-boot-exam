@@ -11,7 +11,7 @@ java {
 	sourceCompatibility = '17'
 }
 // hibernate 작동되는 버전 고정해서 두기,
-ext["hibernate.version"] = "6.4.4.Final"
+ext["hibernate.version"] = "6.2.0.Final"
 
 configurations {
 	compileOnly {
