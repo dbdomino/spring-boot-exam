@@ -7,21 +7,20 @@ import com.minod.itemservice.repository.ItemUpdateDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
 
-/**
+/** JPA 만으로 DB연결, 사용해보기
  * JPA를 설정하려면 EntityManagerFactory , JPA 트랜잭션 매니저( JpaTransactionManager ), DataSource 등등 다양한 설정을 해야 한다.
  * 스프링 부트는 이 과정을 모두 자동화 해준다. main() 메서드 부터 시작해서 JPA를 처음부터 어떻게 설정하는지는 JPA 기본편을 참고하자.
  * 그리고 스프링 부트의 자동 설정은 JpaBaseConfiguration 를 참고하자.
  */
 
 @Slf4j
-@Repository
+//@Repository
 @Transactional  // 필수, JPA의 모든 변경은 트랜잭션 안에서 이루어지므로 넣어준다고 함.
 // 지금은 예제라서 리포지토리에 트랜잭션을 걸어주었다. 다시한번 강조하지만 일반적으로 비즈니스 로직을 시작하는 서비스 계층에 트랜잭션을 걸어주는 것이 맞다.
 public class JpaItemRepository implements ItemRepository {
@@ -63,7 +62,7 @@ public class JpaItemRepository implements ItemRepository {
 
     @Override
     public List<Item> findAll(ItemSearchCond cond) {
-        String jpql = "select ewer i from Item i";// JPA 가 만들어주는 쿼리 jpql이라고 함.
+        String jpql = "select i from Item i";// JPA 가 만들어주는 쿼리 jpql이라고 함.
 
         Integer maxPrice = cond.getMaxPrice();
         String itemName = cond.getItemName();
