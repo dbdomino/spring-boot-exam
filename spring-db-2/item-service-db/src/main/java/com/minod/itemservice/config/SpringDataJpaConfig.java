@@ -7,9 +7,8 @@ import com.minod.itemservice.service.ItemService;
 import com.minod.itemservice.service.ItemServiceV1;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class SpringDataJpaConfig {
     private final SpringDataJpaItemRepository springDataJpaItemRepository; // Interface 를 자동으로 AOP가 인스턴스생성시켜 준다만,
