@@ -1,19 +1,17 @@
 package com.minod.itemservice;
 
-import com.minod.itemservice.config.JpaConfig;
 import com.minod.itemservice.repository.ItemRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 @Slf4j
 //@Import(JdbcTemplateConfigV1.class) // 이게있으면 @Configuration 어노테이션 안붙여도 읽어들여짐. @Import가 더 우선순위를 가짐.
 //@SpringBootApplication
 //@Import(MybatisConfig.class)
-@Import(JpaConfig.class)
+//@Import(JpaConfig.class)
 @SpringBootApplication(scanBasePackages = "com.minod.itemservice") // 오오... 어플리케이션 스캔 범위도 설정가능.
 public class ItemServiceApplication {
 
