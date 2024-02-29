@@ -1,7 +1,6 @@
 package com.minod.itemservice.repository.jpa;
 
 import com.minod.itemservice.domain.Item;
-import com.minod.itemservice.domain.QItem;
 import com.minod.itemservice.repository.ItemRepository;
 import com.minod.itemservice.repository.ItemSearchCond;
 import com.minod.itemservice.repository.ItemUpdateDto;
@@ -63,23 +62,30 @@ public class JpaItemRepositoryV3 implements ItemRepository {
         Integer maxPrice = cond.getMaxPrice();
         // 동적쿼리 생성위해 스프링 데이터 JPA 이용말고 QueryDSL 이용 (
         // Q파일   Q+Class이름  으로된 Entity 클래스 생성됨. Q파일의 역할?
-        QItem qitem = new QItem("i");// 파라미터는 alias로 사용할 철자를 넣음.
+//        QItem qitem = new QItem("i");// 파라미터는 alias로 사용할 철자를 넣음. // 이거 쓰면서 좀 꼬였다.
 
         // 동적 조건을 아래 where 넣는 방법 1
         BooleanBuilder builder = new BooleanBuilder(); // QueryDSL이 제공하는 타입.
-        if (StringUtils.hasText(itemName)) {
+/*        if (StringUtils.hasText(itemName)) {
             builder.and(qitem.itemName.like("%"+itemName+"%"));
         }
         if (maxPrice != null) {
             builder.and(qitem.price.loe(maxPrice));
+        }*/
+
+        if (StringUtils.hasText(itemName)) {
+            builder.and(item.itemName.like("%"+itemName+"%"));
+        }
+        if (maxPrice != null) {
+            builder.and(item.price.loe(maxPrice));
         }
         // 동적 조건을 아래 where 넣는 방법 2
         // 위 조건들을 메서드로 만들어 사용
         // private BooleanExpression likeItemName(String itemName) { ... }
         // private BooleanExpression maxPrice(Integer maxPrice) { ... }
 
-        List<Item> itemList = query.select(qitem)
-                .from(qitem)
+        List<Item> itemList1 = query.select(item)
+                .from(item)
                 .where()
                 .fetch();
         // QItem 안에 내부적으로 가진 static item 객체가 있는데, 이걸 써도 된다.
@@ -95,7 +101,7 @@ public class JpaItemRepositoryV3 implements ItemRepository {
         // 동적쿼리 아닐 경우 직접 조건넣기도 가능.
         List<Item> itemList4 = query.select(item)
                 .from(item)
-                .where(qitem.itemName.like("..").and(qitem.price.loe(100)))
+                .where(item.itemName.like("..").and(item.price.loe(100)))
                 .fetch();
         // 메서드로 각 조건 추가도 가능함. 코드재사용
         List<Item> itemList5 = query.select(item)
@@ -104,7 +110,7 @@ public class JpaItemRepositoryV3 implements ItemRepository {
                 .fetch();
 
 
-        return itemList4;
+        return itemList5;
     }
 
     // 쿼리조각의 재사용
