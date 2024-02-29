@@ -20,29 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ItemRepositoryJPATest {
 
     @Autowired ItemRepository itemRepository;
-    //트랜잭션 관련 코드
-    // DataSource, TransactionManager는 스프링이 자동주입 해준다. 그래서 프로퍼티에 설정만 해둬도 @Autowired로 주입 가능하다.
-    // 스프링이 제공하는 트랜잭션 AOP는 스프링 빈에 등록된 트랜잭션 매니저를 찾아서 사용하기 때문에 트랜잭션 매니저를 스프링 빈으로 등록해두어야 한다.
-/*    @Autowired PlatformTransactionManager transactionManager; // 트랜잭션 프록시에서 쓰기 위해 필요, 트랜잭션 매니저를 스프링 빈으로 등록한다.
-    TransactionStatus status;
-
-    @BeforeEach
-    void beforeEach() {
-    //트랜잭션 시작
-        status = transactionManager.getTransaction(new DefaultTransactionDefinition()); // 이거 Bean등록 안되어있으면 서비스에서 @Transactional 쓰더라도 롤백 지원 안됨.
-        log.info("transaction start stasut : {}",status);
-    }
-    @AfterEach
-    void afterEach() {
-        // MemoryItemRepository 의 경우 제한적으로 사용.
-        if (itemRepository instanceof MemoryItemRepository) {
-            ((MemoryItemRepository) itemRepository).clearStore();
-        } else {
-            // 트랜잭션 롤백, 매우 핵심.
-            transactionManager.rollback(status); // 테스트가 끝나면 롤백 수행되도록.
-            log.info("transaction end stasut : {}",status);
-        }
-    }*/
 
     @Test
 //    @Commit    // 성공시 commit되기를 원하면 이거붙여주면 된다.
