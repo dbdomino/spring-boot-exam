@@ -12,7 +12,7 @@ java {
 }
 
 // hibernate 작동되는 버전 고정해서 두기,
-ext["hibernate.version"] = "6.2.0.Final"
+ext["hibernate.version"] = "6.4.2.Final"
 
 configurations {
 	compileOnly {
@@ -49,6 +49,11 @@ dependencies {
 
 	//postgre driver
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.6.0'
+
+	// AWS Secret Manager
+	// https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-secretsmanager
+	implementation 'com.amazonaws:aws-java-sdk-secretsmanager:1.12.619'
+
 }
 
 //Querydsl 추가, 자동 생성된 Q클래스 gradle clean으로 제거
