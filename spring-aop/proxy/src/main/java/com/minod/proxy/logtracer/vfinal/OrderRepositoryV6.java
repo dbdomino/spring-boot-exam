@@ -1,8 +1,8 @@
 package com.minod.proxy.logtracer.vfinal;
 
-import com.minod.advanced.logtracer.LogTracer;
-import com.minod.advanced.logtracer.collback.LogTracerCallback;
-import com.minod.advanced.logtracer.collback.LogTracerContextCallback;
+import com.minod.proxy.logtracer.LogTracer;
+import com.minod.proxy.logtracer.collback.LogTracerCallback;
+import com.minod.proxy.logtracer.collback.LogTracerContextCallback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
