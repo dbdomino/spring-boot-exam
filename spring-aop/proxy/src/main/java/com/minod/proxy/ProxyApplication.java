@@ -1,6 +1,7 @@
 package com.minod.proxy;
 
-import com.minod.proxy.config.v1_proxy.ConcreteProxyConfig;
+import com.minod.proxy.config.AppV2Config;
+import com.minod.proxy.config.v2_dynamicproxy.DynamicProxyNologConfig;
 import com.minod.proxy.logtracer.LogTracer;
 import com.minod.proxy.logtracer.LogTracerThreadLocal;
 import org.springframework.boot.SpringApplication;
@@ -13,7 +14,9 @@ import org.springframework.context.annotation.Import;
 //@Import(AppV3Config.class)
 //@Import({AppV1Config.class, AppV2Config.class, AppV3Config.class}) // @Import 안에 배열로 등록하고 싶은 설정파일을 다양하게 추가할 수 있다.
 //@Import({InterfaceProxyConfig.class, AppV2Config.class})
-@Import({ConcreteProxyConfig.class})
+//@Import({ConcreteProxyConfig.class})
+//@Import({DynamicProxyBasicConfig.class, AppV2Config.class})
+@Import({DynamicProxyNologConfig.class, AppV2Config.class})
 @SpringBootApplication(scanBasePackages = "com.minod.proxy.app") // 여기 지정된 경로에서만 스캔한다는 소리
 public class ProxyApplication {
 
