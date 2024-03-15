@@ -3,6 +3,7 @@ package com.minod.proxy.프록시팩토리;
 import com.minod.proxy.cglib.ConcreteService;
 import com.minod.proxy.cglib.ServiceImpl;
 import com.minod.proxy.cglib.ServiceInterface;
+import com.minod.proxy.프록시팩토리.advice.TimeAdvice;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -71,7 +72,7 @@ public class ProxyFactoryTest {
         // Advice라고 부르는 이유는? MethodInterceptor구현체 지만 최상위가 Advice라서.
 
         assertThat(AopUtils.isAopProxy(proxy)).isTrue();
-        assertThat(AopUtils.isJdkDynamicProxy(proxy)).isFalse();
+        assertThat(AopUtils.isJdkDynamicProxy(proxy)).isFalse(); // proxyFactory.setProxyTargetClass(true) 이거덕에 CGLIB 기반으로 프록시 객체 생성가능
         assertThat(AopUtils.isCglibProxy(proxy)).isTrue();
     }
 }
