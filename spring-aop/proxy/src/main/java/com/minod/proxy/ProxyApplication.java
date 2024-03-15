@@ -1,6 +1,6 @@
 package com.minod.proxy;
 
-import com.minod.proxy.config.v5_autoproxycreate.AutoProxyCreatorConfig;
+import com.minod.proxy.config.v6_aop.AopConfig;
 import com.minod.proxy.logtracer.LogTracer;
 import com.minod.proxy.logtracer.LogTracerThreadLocal;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +19,8 @@ import org.springframework.context.annotation.Import;
 //@Import({ProxyFactoryConfigV1.class, AppV2Config.class})
 //@Import({ProxyFactoryConfigV2.class})
 //@Import({BeanPostProcessorConfig.class})
-@Import({AutoProxyCreatorConfig.class})
+//@Import({AutoProxyCreatorConfig.class})
+@Import({AopConfig.class})
 @SpringBootApplication(scanBasePackages = "com.minod.proxy.app") // 여기 지정된 경로에서만 스캔한다는 소리
 public class ProxyApplication {
 
