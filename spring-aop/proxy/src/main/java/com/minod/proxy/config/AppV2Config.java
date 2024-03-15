@@ -4,8 +4,9 @@ import com.minod.proxy.app.v2.OrderControllerV2;
 import com.minod.proxy.app.v2.OrderRepositoryV2;
 import com.minod.proxy.app.v2.OrderServiceV2;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-//@Configuration
+@Configuration
 public class AppV2Config {
     @Bean
     public OrderControllerV2 orderControllerV2() {

@@ -3,10 +3,10 @@ package com.minod.proxy.app.v2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
-@RestController
+//@RestController
 public class OrderControllerV2 {
     private final OrderServiceV2 orderService;
     public OrderControllerV2(OrderServiceV2 orderService) {
@@ -14,11 +14,13 @@ public class OrderControllerV2 {
     }
 
     @RequestMapping("/v2/request")
+    @ResponseBody
     public String request(@RequestParam("itemId") String itemId) {
         orderService.orderItem(itemId);
         return "ok";
     }
     @RequestMapping("/v2/nolog")
+    @ResponseBody
     public String noLog() {
         return "ok";
     }

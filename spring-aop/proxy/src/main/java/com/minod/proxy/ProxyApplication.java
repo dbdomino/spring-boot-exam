@@ -1,7 +1,6 @@
 package com.minod.proxy;
 
-import com.minod.proxy.config.AppV2Config;
-import com.minod.proxy.config.v2_dynamicproxy.DynamicProxyNologConfig;
+import com.minod.proxy.config.v5_autoproxycreate.AutoProxyCreatorConfig;
 import com.minod.proxy.logtracer.LogTracer;
 import com.minod.proxy.logtracer.LogTracerThreadLocal;
 import org.springframework.boot.SpringApplication;
@@ -16,7 +15,11 @@ import org.springframework.context.annotation.Import;
 //@Import({InterfaceProxyConfig.class, AppV2Config.class})
 //@Import({ConcreteProxyConfig.class})
 //@Import({DynamicProxyBasicConfig.class, AppV2Config.class})
-@Import({DynamicProxyNologConfig.class, AppV2Config.class})
+//@Import({DynamicProxyNologConfig.class, AppV2Config.class})
+//@Import({ProxyFactoryConfigV1.class, AppV2Config.class})
+//@Import({ProxyFactoryConfigV2.class})
+//@Import({BeanPostProcessorConfig.class})
+@Import({AutoProxyCreatorConfig.class})
 @SpringBootApplication(scanBasePackages = "com.minod.proxy.app") // 여기 지정된 경로에서만 스캔한다는 소리
 public class ProxyApplication {
 

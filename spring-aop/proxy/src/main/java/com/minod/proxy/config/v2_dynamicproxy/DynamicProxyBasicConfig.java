@@ -1,6 +1,7 @@
 package com.minod.proxy.config.v2_dynamicproxy;
 
 import com.minod.proxy.app.v1.*;
+import com.minod.proxy.config.v2_dynamicproxy.handler.LogTraceBasicHandler;
 import com.minod.proxy.logtracer.LogTracer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
