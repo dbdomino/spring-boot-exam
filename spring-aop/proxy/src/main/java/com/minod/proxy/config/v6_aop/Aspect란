@@ -1,0 +1,14 @@
+Advisor (포인트컷, Advice)
+AOP 기능으로. 어드바이저를 Bean으로 등록하면 원하는 포인트컷에 프록시 기능으로 자동주입 가능했다.
+
+@Aspect 라는 어노테이션으로
+Advisor를 구현하는 방법도 있다.
+Advisor를 어노테이션으로 만들어 주는 기능이라고 한다.
+Advisor를 담당하는 클래스를 만들어준다고 보면된다.
+(기존엔 implements MethodInterceptor 를 구현해서 advice를 만들며, invoke를 override 했어야 했다.
+ 이걸 Config에서 return new DefaultPointcutAdvisor(pointcut, advice); 를 반환해서 Advisor만들었었다. )
+
+@Aspect 붙인 클래스는 컴포넌트스캔 대상이 아니다.
+수동으로 Bean 등록 해줘야 한다.
+비교해보자.
+
