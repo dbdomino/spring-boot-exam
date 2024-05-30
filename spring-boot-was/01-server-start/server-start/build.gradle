@@ -1,0 +1,26 @@
+plugins {
+	id 'java'
+	id 'war'
+}
+
+group = 'com.minod'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// 서블릿 사용에 필요한 모듈
+	implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
