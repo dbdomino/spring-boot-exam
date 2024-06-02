@@ -5,6 +5,8 @@ plugins {
 group = 'hello'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
+//컴파일시 한글 인코딩 깨지는 이슈발생, 이걸로 해결
+compileJava.options.encoding = 'UTF-8'
 
 repositories {
     mavenCentral()
