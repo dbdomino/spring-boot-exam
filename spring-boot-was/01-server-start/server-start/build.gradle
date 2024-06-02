@@ -19,6 +19,12 @@ dependencies {
 
 	// 서블릿 사용에 필요한 모듈
 	implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+
+	//스프링 MVC 추가
+	implementation 'org.springframework:spring-webmvc:6.0.4'
+
+	//내장 톰캣 추가하기, 톰캣을 내장 라이브러리로 포함시켜 main실행시 tomcat을 띄울 수 있다.
+	// implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.5'
 }
 
 tasks.named('test') {
